@@ -13,26 +13,27 @@ def config_file(action='get', **kwargs):
     import_path - путь к каталогу импорта
     export_path - путь к каталогу экспорта
 
+    Для action:
     get - возвращается словарь с параметрами,
     set - в файл конфигурации записываются параметры kwargs.
     """
 
     cast = {'import_path': 'import_path', 'export_path': 'export_path'}
 
-    config = ConfigParser()
-    config.read('config.ini')  # Получение файла конфигурации
+    conf = ConfigParser()
+    conf.read('conf.ini')  # Получение файла конфигурации
     if action == 'set':
         for arg, key in cast.items():
             if arg in kwargs:
-                config['DEFAULT'][key] = kwargs[arg]
+                conf['DEFAULT'][key] = kwargs[arg]
     elif action == 'get':
         out = dict()
         for arg, key in cast.items():
-            out[arg] = config['DEFAULT'].get(key, '')
+            out[arg] = conf['DEFAULT'].get(key, '')
         return out
 
-    with open('config.ini', 'w') as configfile:
-        config.write(configfile)
+    with open('conf.ini', 'w') as configfile:
+        conf.write(configfile)
 
 
 def select_folder(path, name):
@@ -48,6 +49,7 @@ def button_import():
         import_var.set(path)
         config_file(action='set', import_path=path)
         update_cast()
+
 
 def button_export():
     """ Обработка нажатия кнопки выбора каталога экспорта """
@@ -121,10 +123,6 @@ def button_do():
     progress.place_forget()  # Скрыть прогресс бар
 
 
-
-
-
-
 # Инициализация
 config = config_file()
 import_path = config['import_path']
@@ -146,7 +144,6 @@ if not os.path.exists('sample.xlsx'):
     messagebox.showerror("Ошибка", "Отсутствует образец исходящего документа 'sample.xlsx'!")
     exit()
 
-
 # Создаем окно
 root = tk.Tk()
 
@@ -156,7 +153,7 @@ h = root.winfo_screenheight()
 
 # Рисуем окно
 root.title("Sqr to Excel Converter")
-root.geometry(f'500x600+{(w-500)//2}+{(h-600)//2}')
+root.geometry(f'500x600+{(w - 500) // 2}+{(h - 600) // 2}')
 
 # Импорт
 import_frame = LabelFrame(root, width=470, height=310, text='Импорт', foreground='#083863', font=('Arial', 12))
@@ -177,9 +174,8 @@ import_button.place(x=390, y=40)
 
 # Кнопка со значком папки Открыть каталог
 import_button_folder = tk.Button(import_frame, text='📁', font=('Arial', 8), width=3, height=1,
-                          command=lambda: os.startfile(import_var.get()))
+                                 command=lambda: os.startfile(import_var.get()))
 import_button_folder.place(x=425, y=40)
-
 
 # Метка Выберите файл(ы) для импорта
 import_label2 = tk.Label(import_frame, text='Выберите файл(ы) для импорта', font=('Arial', 12))
@@ -212,7 +208,6 @@ def update_cast():
 
 update_cast()  # Обновление списка файлов в listbox
 
-
 # Экспорт
 export_frame = LabelFrame(root, width=470, height=110, text='Экспорт', foreground='#083863', font=('Arial', 12))
 export_frame.place(x=15, y=380)
@@ -232,7 +227,7 @@ export_button.place(x=390, y=40)
 
 # Кнопка со значком папки Открыть каталог
 export_button_folder = tk.Button(export_frame, text='📁', font=('Arial', 8), width=3, height=1,
-                          command=lambda: os.startfile(export_var.get()))
+                                 command=lambda: os.startfile(export_var.get()))
 export_button_folder.place(x=425, y=40)
 
 # Кнопка Экспорт
@@ -245,8 +240,6 @@ cancel_button.place(x=265, y=510)
 cancel_button.bind('<Button-1>', lambda e: root.destroy())
 
 # listbox.bind('<Button-1>', lambda e: listbox.selection_toggle(listbox.nearest(e.y)))
-
-
 
 
 root.mainloop()
