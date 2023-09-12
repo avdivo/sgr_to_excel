@@ -1,44 +1,64 @@
-# Прочитать файл 006-23(вед.18).txt.sgr как текст Windows-1251
+# Прочитать полученный файл как текст Windows-1251
 # Данные в строках файла разделены пробелами, создать список списков
-# Если элемент может быть преобразован в число, то преобразовать его в число
-# Открыть файл Вывод лаборатории в Excel.xlsx, очистить в нем вкладку Ввод данных
-# и вставить в нее данные из файла 006-23(вед.18).txt.sgr
-# сохранить файл Вывод лаборатории в Excel.xlsx
+# Если элемент может быть преобразован в число, то преобразовать его в число.
+# Открыть файл sample.xlsx, очистить в нем вкладку Ввод данных
+# и вставить в нее сформированные данные
+# сохранить файл в .xlsx
 import os
 import openpyxl
 
-# Открыть файл 006-23(вед.18).txt.sgr как текст Windows-1251
-with open('006-23(вед.18).txt.sgr', 'r', encoding='cp1251') as f:
-    lines = f.readlines()
 
-dates = [i.split() for i in lines]
+def sgr_to_excel(import_file, export_file):
 
-for line in dates:
-    for i in range(len(line)):
-        try:
-            line[i] = float(line[i])
-        except ValueError:
-            pass
+    # Открыть файл как текст Windows-1251
+    try:
+        with open(import_file, 'r', encoding='cp1251') as f:
+            lines = f.readlines()
+    except Exception as e:
+        raise Exception("Ошибка при открытии файла: " + str(e))
 
-# Открыть файл Вывод лаборатории в Excel.xlsx
-wb = openpyxl.load_workbook('Вывод лаборатории в Excel.xlsx')
-sheet = wb['Ввод данных']
+    try:
+        dates = [i.split() for i in lines]
 
-# Очистить в нем вкладку Ввод данных и сделать для листа текстовый формат
-sheet.delete_rows(1, sheet.max_row)
+        for line in dates:
+            for i in range(len(line)):
+                try:
+                    line[i] = float(line[i])
+                except ValueError:
+                    pass
+    except Exception as e:
+        raise Exception("Ошибка при обработке файла: " + str(e))
 
-# и вставить в нее данные из файла 006-23(вед.18).txt.sgr
-for i in range(len(dates)):
-    sheet.append(dates[i])
+    # Открыть файл Вывод лаборатории в Excel.xlsx
+    try:
+        wb = openpyxl.load_workbook('sample.xlsx')
+        sheet = wb['Ввод данных']
+    except Exception as e:
+        raise Exception("Ошибка при открытии шаблона: " + str(e))
 
-sheet = wb["Итог"]
-wb.active = sheet  # Установить активным нужный лист
+    try:
+        # Очистить в нем вкладку Ввод данных и сделать для листа текстовый формат
+        sheet.delete_rows(1, sheet.max_row)
 
-# сохранить файл Вывод лаборатории в Excel.xlsx
-wb.save('Вывод лаборатории в Excel.xlsx')
+        # и вставить в нее данные из файла 006-23(вед.18).txt.sgr
+        for i in range(len(dates)):
+            sheet.append(dates[i])
 
-# Открыть файл Вывод лаборатории в Excel.xlsx
-os.startfile('Вывод лаборатории в Excel.xlsx')
+        sheet = wb["Итог"]
+        wb.active = sheet  # Установить активным нужный лист
+    except Exception as e:
+        raise Exception("Ошибка при изменении шаблона: " + str(e))
+
+    # сохранить файл Вывод лаборатории в Excel.xlsx
+    try:
+        wb.save(export_file)
+    except Exception as e:
+        return "Ошибка при сохранении файла: " + str(e)
+
+    return "Успешно экспортирован!"
+
+    # Открыть файл Вывод лаборатории в Excel.xlsx
+    # os.startfile('Вывод лаборатории в Excel.xlsx')
 
 
 
