@@ -3,6 +3,7 @@ from tkinter import *
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 from configparser import ConfigParser
+import shutil
 
 from sgr_to_excel import sgr_to_excel
 
@@ -132,8 +133,20 @@ if getattr(sys, 'frozen', False):
     work_dir = os.path.dirname(exe_path)
 else:
     # Код в обычном .py файле
+    exe_path = None
     work_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(work_dir)
+
+# Проверка существования образца выходного файла
+if not os.path.exists(os.path.join(work_dir, 'sample.xlsx')):
+    if exe_path:
+        # Если запущен из EXE, то скопировать образец из EXE в рабочий каталог
+        shutil.copy(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sample.xlsx'), work_dir)
+        messagebox.showerror("Ошибка", "Восстановлен образец исходящего документа 'sample.xlsx'!")
+    else:
+        # Вывести диалоговое окно об ошибке и выйти из программы
+        messagebox.showerror("Ошибка", "Отсутствует образец исходящего документа 'sample.xlsx'!")
+        exit()
 
 config = config_file()
 import_path = config['import_path']
@@ -149,12 +162,6 @@ if not import_path:
 if not export_path:
     export_path = work_dir
 config_file(action='set', import_path=import_path, export_path=export_path)
-
-# Проверка существования образца выходного файла
-if not os.path.exists('sample.xlsx'):
-    # Вывести диалоговое окно об ошибке и выйти из программы
-    messagebox.showerror("Ошибка", "Отсутствует образец исходящего документа 'sample.xlsx'!")
-    exit()
 
 # Создаем окно
 root = tk.Tk()
