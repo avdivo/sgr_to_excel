@@ -1,4 +1,4 @@
-import os
+import os, sys
 from tkinter import *
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
@@ -103,7 +103,7 @@ def button_do():
                 i += 1
 
             # Прочитать, обработать и сохранить файл
-            ok[os.path.basename(new_file)] = sgr_to_excel(file, new_file)
+            ok[os.path.basename(new_file)] = sgr_to_excel(file, new_file, work_dir)
 
         except Exception as e:
             if not message:
@@ -124,18 +124,30 @@ def button_do():
 
 
 # Инициализация
+if getattr(sys, 'frozen', False):
+    # Код внутри EXE файла
+    # Получаем путь до запущенного EXE файла
+    exe_path = os.path.abspath(sys.executable)
+    # Определяем рабочий каталог как родительский для EXE
+    work_dir = os.path.dirname(exe_path)
+else:
+    # Код в обычном .py файле
+    work_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(work_dir)
+
 config = config_file()
 import_path = config['import_path']
 export_path = config['export_path']
+
 # Если путь не существует, то установить текущий каталог
 if not os.path.exists(import_path):
     import_path = None
 if not os.path.exists(export_path):
     export_path = None
 if not import_path:
-    import_path = os.path.dirname(os.path.abspath(__file__))
+    import_path = work_dir
 if not export_path:
-    export_path = os.path.dirname(os.path.abspath(__file__))
+    export_path = work_dir
 config_file(action='set', import_path=import_path, export_path=export_path)
 
 # Проверка существования образца выходного файла

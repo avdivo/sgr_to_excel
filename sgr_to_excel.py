@@ -4,10 +4,11 @@
 # Открыть файл sample.xlsx, очистить в нем вкладку Ввод данных
 # и вставить в нее сформированные данные
 # сохранить файл в .xlsx
+import os
 import openpyxl
 
 
-def sgr_to_excel(import_file, export_file):
+def sgr_to_excel(import_file, export_file, work_dir):
     # Открыть файл как текст Windows-1251
     try:
         with open(import_file, 'r', encoding='cp1251') as f:
@@ -29,7 +30,7 @@ def sgr_to_excel(import_file, export_file):
 
     # Открыть файл Вывод лаборатории в Excel.xlsx
     try:
-        wb = openpyxl.load_workbook('sample.xlsx', data_only=True)
+        wb = openpyxl.load_workbook(os.path.join(work_dir, 'sample.xlsx'), data_only=True)
         sheet = wb['Ввод данных']
     except Exception as e:
         raise Exception("Ошибка при открытии шаблона: " + str(e))
