@@ -4,7 +4,6 @@
 # Открыть файл sample.xlsx, очистить в нем вкладку Ввод данных
 # и вставить в нее сформированные данные
 # сохранить файл в .xlsx
-import os
 import openpyxl
 
 
@@ -18,9 +17,9 @@ def sgr_to_excel(import_file, export_file):
         raise Exception("Ошибка при открытии файла: " + str(e))
 
     try:
-        dates = [i.split() for i in lines]
+        datas = [i.split() for i in lines]
 
-        for line in dates:
+        for line in datas:
             for i in range(len(line)):
                 try:
                     line[i] = float(line[i])
@@ -41,11 +40,11 @@ def sgr_to_excel(import_file, export_file):
         sheet.delete_rows(1, sheet.max_row)
 
         # и вставить в нее данные из файла 006-23(вед.18).txt.sgr
-        for i in range(len(dates)):
-            sheet.append(dates[i])
+        for i in range(len(datas)):
+            sheet.append(datas[i])
 
         sheet = wb["Итог"]
-        wb.active = sheet  # Установить активным нужный лист
+        wb.active = sheet  # Активация нужного листа
     except Exception as e:
         raise Exception("Ошибка при изменении шаблона: " + str(e))
 
@@ -56,10 +55,3 @@ def sgr_to_excel(import_file, export_file):
         return "Ошибка при сохранении файла: " + str(e)
 
     return "Успешно экспортирован!"
-
-    # Открыть файл Вывод лаборатории в Excel.xlsx
-    # os.startfile('Вывод лаборатории в Excel.xlsx')
-
-
-
-
