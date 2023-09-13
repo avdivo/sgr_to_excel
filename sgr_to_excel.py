@@ -8,7 +8,6 @@ import openpyxl
 
 
 def sgr_to_excel(import_file, export_file):
-
     # Открыть файл как текст Windows-1251
     try:
         with open(import_file, 'r', encoding='cp1251') as f:
@@ -30,16 +29,13 @@ def sgr_to_excel(import_file, export_file):
 
     # Открыть файл Вывод лаборатории в Excel.xlsx
     try:
-        wb = openpyxl.load_workbook('sample.xlsx')
+        wb = openpyxl.load_workbook('sample.xlsx', data_only=True)
         sheet = wb['Ввод данных']
     except Exception as e:
         raise Exception("Ошибка при открытии шаблона: " + str(e))
 
     try:
-        # Очистить в нем вкладку Ввод данных и сделать для листа текстовый формат
-        sheet.delete_rows(1, sheet.max_row)
-
-        # и вставить в нее данные из файла 006-23(вед.18).txt.sgr
+        # Вставить в лист данные
         for i in range(len(datas)):
             sheet.append(datas[i])
 
