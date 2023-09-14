@@ -136,12 +136,13 @@ else:
     exe_path = None
     work_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(work_dir)
+inside_folder = os.path.dirname(os.path.abspath(__file__))
 
 # Проверка существования образца выходного файла
 if not os.path.exists(os.path.join(work_dir, 'sample.xlsx')):
     if exe_path:
         # Если запущен из EXE, то скопировать образец из EXE в рабочий каталог
-        shutil.copy(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sample.xlsx'), work_dir)
+        shutil.copy(os.path.join(inside_folder, 'sample.xlsx'), work_dir)
         messagebox.showerror("Ошибка", "Восстановлен образец исходящего документа 'sample.xlsx'!")
     else:
         # Вывести диалоговое окно об ошибке и выйти из программы
@@ -173,7 +174,7 @@ h = root.winfo_screenheight()
 # Рисуем окно
 root.title("Sqr to Excel Converter")
 root.geometry(f'500x600+{(w - 500) // 2}+{(h - 600) // 2}')
-root.iconbitmap('sticker.ico')
+root.iconbitmap(os.path.join(inside_folder, 'sticker.ico'))
 
 # Импорт
 import_frame = LabelFrame(root, width=470, height=310, text='Импорт', foreground='#083863', font=('Arial', 12))
