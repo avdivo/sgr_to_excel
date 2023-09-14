@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 from tkinter import *
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
@@ -256,11 +257,8 @@ do_button = tk.Button(root, text='Экспорт', font=('Arial', 12), width=10,
 do_button.place(x=135, y=510)
 
 # Кнопка Отмена
-cancel_button = tk.Button(root, text='Отмена', font=('Arial', 12), width=10, height=1)
+cancel_button = tk.Button(root, text='Закрыть', font=('Arial', 12), width=10, height=1)
 cancel_button.place(x=265, y=510)
 cancel_button.bind('<Button-1>', lambda e: root.destroy())
-
-# listbox.bind('<Button-1>', lambda e: listbox.selection_toggle(listbox.nearest(e.y)))
-
 
 root.mainloop()
