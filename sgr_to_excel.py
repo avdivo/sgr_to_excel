@@ -30,12 +30,15 @@ def sgr_to_excel(import_file, export_file, work_dir):
 
     # Открыть файл Вывод лаборатории в Excel.xlsx
     try:
-        wb = openpyxl.load_workbook(os.path.join(work_dir, 'sample.xlsx'), data_only=True)
+        wb = openpyxl.load_workbook(os.path.join(work_dir, 'sample.xlsx'))
         sheet = wb['Ввод данных']
     except Exception as e:
         raise Exception("Ошибка при открытии шаблона: " + str(e))
 
     try:
+        # Очистить в нем вкладку Ввод данных
+        sheet.delete_rows(1, sheet.max_row)
+
         # Вставить в лист данные
         for i in range(len(datas)):
             sheet.append(datas[i])

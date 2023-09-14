@@ -163,7 +163,7 @@ if not export_path:
     export_path = work_dir
 config_file(action='set', import_path=import_path, export_path=export_path)
 
-# Создаем окно
+# Создаем окно с иконкой и заголовком
 root = tk.Tk()
 
 # Размер экране
@@ -173,6 +173,7 @@ h = root.winfo_screenheight()
 # Рисуем окно
 root.title("Sqr to Excel Converter")
 root.geometry(f'500x600+{(w - 500) // 2}+{(h - 600) // 2}')
+root.iconbitmap('sticker.ico')
 
 # Импорт
 import_frame = LabelFrame(root, width=470, height=310, text='Импорт', foreground='#083863', font=('Arial', 12))
